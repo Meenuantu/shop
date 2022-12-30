@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{%  load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.desc|truncatewords:155}}
+    {% else %}
+        Welcome to My shopping App. One stop solution for all your Needs
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{category.name}} -- MY shoppy store
+    {% else %}
+        Here are our new collections -- My shoppy store
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx_auto">
+        <p>
+            <a href="{% url 'ecomapp:allProdCat' %}"> Our collections</a>
+        </p>
+            </div>
+    </div>
+</div>
+{% endif %}
+<div class="mx_auto">
+{% if category %}
+    <img class="my_image" src="{{category.image.url }}" alt="{{category.name}}" width="500 px">
+    </div>
+    <br>
+    <div>
+        <h1 class="text_center my_title" >{{category.name}}</h1>
+        <p class="text_justify">{{category.desc}}</p>
+    </div>
+{% else %}
+    <div>
+        <img class="my_image my_img_padding" src="{% static 'img/banner.jpg' %}" alt="our products banner" width="2500 px;">
+    </div>
+    <br>
+    <div>
+        <h1 class="text_center my_title">Our product collections</h1>
+        <p class="text_justify">my shoppy app is India's leading pure-play value Ecommerce platform. Founded in 2010 by Kunal Bahl and Rohit Bansal, My shoppy App is one of the top four online lifestyle shopping destinations of India.</p>
+    </div>
+{% endif %}
+<div class="container">
+    <div class="row mx-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-md-12 col-lg-4" >
+        <div class="card text-center" style="min-width:18rem;">
+            <a href="{{product.get_url}}">
+                <img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="300 px">
+            </a>
+            <div class="card_body">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %} ">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
